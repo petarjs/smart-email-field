@@ -5,6 +5,8 @@
   var $wrapper;
   var $shadow;
 
+  var EMAIL_DOMAINS = ['gmail.com', 'yahoo.com', 'ymail.com', 'outlook.com'];
+
   function init(selector) {
     $el = $(selector);
     if(!$el.length) throw Error('No elements match the selector');
@@ -16,7 +18,7 @@
     $wrapper.prepend(getShadowField($el));
     $shadow = $('.sef-shadow');
 
-    $el.keyup(updateShadowText)
+    $el.keydown(updateShadowText)
 
   }
 
@@ -32,11 +34,33 @@
   }
 
   function updateShadowText(ev) {
-    var text = $el.val();
+    // filter out non alpha num keys
+    // tab completion, right arrow completion, enter completion ? Maybe just right arrow
 
-    if(text.indexOf('@') !== -1) {
-      $shadow.text(text + 'gmail.com');
-    }
+    setTimeout(function() {
+      var text = $el.val();
+      var textToAdd = '';
+
+      var atIndex = text.indexOf('@');
+      if(atIndex !== -1) {
+        var afterAt = text.substring(atIndex + 1);
+        console.log(afterAt)
+
+        var foundDomain = '';
+        for (var i = EMAIL_DOMAINS.length - 1; i >= 0; i--) {
+          if(EMAIL_DOMAINS[i].indexOf(afterAt) === 0) {
+            foundDomain = EMAIL_DOMAINS[i];
+          }
+        }
+        console.log(foundDomain)
+        if(foundDomain) {
+          textToAdd = foundDomain.substring(afterAt.length);
+        }
+
+        $shadow.text(text + textToAdd);
+      }
+
+    }, 0)
 
   }
 
