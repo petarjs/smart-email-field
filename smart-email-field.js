@@ -36,7 +36,6 @@
   function updateShadowText(ev) {
     // filter out non alpha num keys
     // tab completion, right arrow completion, enter completion ? Maybe just right arrow
-    // handle delete
 
     setTimeout(function() {
       var text = $el.val();
@@ -59,6 +58,8 @@
         }
 
         $shadow.text(text + textToAdd);
+      } else {
+        $shadow.text('');
       }
 
     }, 0)
