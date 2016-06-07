@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-rc1/jquery.min.js"></script>
+    <link rel="stylesheet" href="smart-email-field.css">
+    <script src="smart-email-field.js"></script>
+
+    <style>
+      .smart-email {
+        font-size: 22px;
+        background: beige;
+        box-shadow: none;
+        border: 2px solid #eee;
+        border-radius: 4px;
+        padding: 3px 5px;
+        font-family: Helvetica;
+      }
+    </style>
+  </head>
+  <body>
+
+    <input type="email" class="smart-email">
+
+    <script>
+      window.SmartEmailField.init('.smart-email');
+    </script>
+  </body>
+</html>
