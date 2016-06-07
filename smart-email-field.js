@@ -5,6 +5,7 @@
   var $wrapper;
   var $shadow;
 
+  // https://github.com/mailcheck/mailcheck/wiki/List-of-Popular-Domains
   var EMAIL_DOMAINS = ['gmail.com', 'yahoo.com', 'ymail.com', 'outlook.com'];
 
   function init(selector) {
