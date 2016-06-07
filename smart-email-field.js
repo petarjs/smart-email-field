@@ -58,18 +58,23 @@
   }
 
   function updateShadowText(ev) {
-    if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev)) {
+    if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev) && !isArrowRight(ev)) {
       return;
     }
 
     // filter out non alpha num keys
-    // tab completion, right arrow completion, enter completion ? Maybe just right arrow
     // handle firefox bugs
 
     setTimeout(function() {
       var text = ev.target.value;
+
       if(isSpace(ev)) {
         text += ' '
+      }
+
+      if(isArrowRight(ev)) {
+        $el.val($shadow.text());
+        return;
       }
 
       var textToAdd = '';
