@@ -62,7 +62,6 @@
       return;
     }
 
-    // filter out non alpha num keys
     // handle firefox bugs
 
     setTimeout(function() {
