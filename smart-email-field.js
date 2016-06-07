@@ -33,18 +33,49 @@
     return shadow;
   }
 
+  function isAlphanumeric(e) {
+    return e.which <= 90 && e.which >= 48;
+  }
+
+  function isSpecialKey(e) {
+    return (e.which >= 8 && e.which <= 48) || (e.which >= 91 && e.which <= 145);
+  }
+
+  function isSpace(e) {
+    return e.which === 32;
+  }
+
+  function isBackspace(e) {
+    return e.which === 8;
+  }
+
+  function isDelete(e) {
+    return e.which === 46;
+  }
+
+  function isArrowRight(e) {
+    return e.which === 39;
+  }
+
   function updateShadowText(ev) {
+    if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev)) {
+      return;
+    }
+
     // filter out non alpha num keys
     // tab completion, right arrow completion, enter completion ? Maybe just right arrow
+    // handle firefox bugs
 
     setTimeout(function() {
-      var text = $el.val();
-      var textToAdd = '';
+      var text = ev.target.value;
+      if(isSpace(ev)) {
+        text += ' '
+      }
 
+      var textToAdd = '';
       var atIndex = text.indexOf('@');
       if(atIndex !== -1) {
         var afterAt = text.substring(atIndex + 1);
-        console.log(afterAt)
 
         var foundDomain = '';
         for (var i = EMAIL_DOMAINS.length - 1; i >= 0; i--) {
@@ -52,7 +83,7 @@
             foundDomain = EMAIL_DOMAINS[i];
           }
         }
-        console.log(foundDomain)
+
         if(foundDomain) {
           textToAdd = foundDomain.substring(afterAt.length);
         }
