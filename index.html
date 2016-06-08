@@ -16,6 +16,7 @@
         font-family: Helvetica;
         outline: none;
         font-weight: 300;
+        background-color: azure;
       }
 
       .smart-email:active,
@@ -25,8 +26,11 @@
     </style>
   </head>
   <body>
-
-    <input type="email" class="smart-email">
+    
+    <form action="#">
+      <input type="email" class="smart-email">
+      <button>Yep</button>
+    </form>
 
     <script>
       window.SmartEmailField.init('.smart-email');

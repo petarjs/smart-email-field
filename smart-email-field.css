@@ -3,17 +3,16 @@
   position: relative;
 }
 
-.sef-shadow {
-  position: absolute !important;
+.sef-wrapper .sef-shadow {
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  opacity: 0.5 !important;
+  opacity: 0.3;
 }
 
 .sef-wrapper .smart-email {
   z-index: 1;
   position: relative;
-  background: transparent;
 }

@@ -1,9 +1,9 @@
 (function (window, document, $) {
   'use strict';
 
-  var $el;
-  var $wrapper;
-  var $shadow;
+  var el;
+  var wrapper;
+  var shadow;
 
   var EMAIL_DOMAINS = [
     /* Default domains included */
@@ -48,28 +48,46 @@
   ];
 
   function init(selector) {
-    $el = $(selector);
-    if(!$el.length) throw Error('No elements match the selector');
+    el = document.querySelector(selector);
+    if(!el) throw Error('No elements match the selector');
 
-    $el.wrap(getWrapper());
+    wrap(el);
+    el = document.querySelector(selector);
+    
+    shadow = getShadowField(el);
+    wrapper = document.querySelector('.sef-wrapper');
+    prepend(wrapper, shadow);
 
-    $wrapper = $('.sef-wrapper');
+    shadow = document.querySelector('.sef-shadow');
 
-    $wrapper.prepend(getShadowField($el));
-    $shadow = $('.sef-shadow');
-
-    $el.keydown(updateShadowText)
-
+    addEvent(el, 'keydown', updateShadowText);
   }
 
-  function getWrapper() {
-    return $('<div>').addClass('sef-wrapper');
+  function addEvent(element, evnt, funct){
+    if (element.attachEvent)
+     return element.attachEvent('on' + evnt, funct);
+    else
+     return element.addEventListener(evnt, funct, false);
+  }
+
+  function wrap(el) {
+    var oldHtml = el.outerHTML;
+    var newHtml = '<div class="sef-wrapper">' + oldHtml + '</div>';
+    el.outerHTML = newHtml;
+    return el;
+  }
+
+  function prepend(parent, el) {
+    parent.insertBefore(el, parent.firstChild)
   }
 
   function getShadowField(el) {
-    var elCss = window.getComputedStyle(el.get(0), '').cssText;
+    var elCss = window.getComputedStyle(el, '').cssText;
     addStyle('.sef-shadow {' + elCss + '}');
-    var shadow = $('<div>').addClass('sef-shadow');
+    el.style.background = 'transparent';
+    
+    var shadow = document.createElement('div');
+    shadow.className = 'sef-shadow';
     return shadow;
   }
 
@@ -103,6 +121,7 @@
     }
 
     // handle firefox bugs
+    // handle multiple fields
 
     setTimeout(function() {
       var text = ev.target.value;
@@ -112,7 +131,7 @@
       }
 
       if(isArrowRight(ev)) {
-        $el.val($shadow.text());
+        el.value = element.innerText || element.textContent;
         return;
       }
 
@@ -132,9 +151,9 @@
           textToAdd = foundDomain.substring(afterAt.length);
         }
 
-        $shadow.text(text + textToAdd);
+        shadow.innerText = shadow.textContent = text + textToAdd;
       } else {
-        $shadow.text('');
+        shadow.innerText = shadow.textContent = '';
       }
 
     }, 0)
