@@ -163,6 +163,27 @@
     }
 
     /**
+     * Throttles a function
+     * @private
+     * @param {Function} callback - function to throttle
+     * @param {Number} limit - miliseconds to throttle
+     * @param {Object} ctx - optional context for callback to be called in
+     * @returns {Function}
+     */
+    function throttle (callback, limit, ctx) {
+      var wait = false;
+      return function () {
+        if (!wait) {
+          callback.apply(ctx || null, arguments);
+          wait = true;
+          setTimeout(function () {
+            wait = false;
+          }, limit);
+        }
+      }
+    }
+
+    /**
      * Add an element before another
      * @private
      * @param {DOMNode} parent
@@ -245,6 +266,7 @@
      * @returns {undefined}
      */
     function updateShadowText(ev) {
+
       if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev) && !isArrowRight(ev)) {
         return;
       }
@@ -270,8 +292,8 @@
           var afterAt = text.substring(atIndex + 1);
 
           var foundDomain = '';
-          for (var i = EMAIL_DOMAINS.length - 1; i >= 0; i--) {
-            if(EMAIL_DOMAINS[i].indexOf(afterAt) === 0) {
+          for (var i = 0; i < EMAIL_DOMAINS.length && !foundDomain; i++) {
+            if(EMAIL_DOMAINS[i] && EMAIL_DOMAINS[i].indexOf(afterAt) === 0) {
               foundDomain = EMAIL_DOMAINS[i];
             }
           }
@@ -289,16 +311,23 @@
 
     }
 
+    function setEmailDomains(newEmailDomains) {
+      options.emailDomains = newEmailDomains;
+    }
+
     /**
      * Initialize Plugin
      * @public
      * @param {String} selector Selector of an element to initialize on
      * @param {Object} options User settings
+     *                         options.emailDomains - email domains to use. Array of strings
      */
     exports.init = function ( selector, options ) {
 
         // feature test
         if ( !supports ) return;
+
+        extend(defaults, options);
 
         el = document.querySelector(selector);
         if(!el) throw Error('No elements match the selector');
@@ -312,7 +341,7 @@
 
         shadow = document.querySelector('.sef-shadow');
 
-        addEvent(el, 'keydown', updateShadowText);
+        addEvent(el, 'keydown', throttle(updateShadowText, 100));
 
     };
 
@@ -320,6 +349,8 @@
     //
     // Public APIs
     //
+    
+    exports.setEmailDomains = setEmailDomains;
 
     return exports;
 
