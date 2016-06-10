@@ -1,6 +1,7 @@
 .sef-wrapper {
   display: inline-block;
   position: relative;
+  overflow: hidden;
 }
 
 .sef-wrapper .sef-shadow {

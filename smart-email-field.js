@@ -9,28 +9,14 @@
  *
  */
 
-(function (root, factory) {
-    if ( typeof define === 'function' && define.amd ) {
-        define(factory);
-    } else if ( typeof exports === 'object' ) {
-        module.exports = factory;
-    } else {
-        root.SmartEmailField = factory(root); // @todo Update to plugin name
-    }
-})(this, function (root) {
-
+;(function (window, document, undefined) {
     'use strict';
 
     //
     // Variables
     //
 
-    var exports = {}; // Object for public APIs
-    var supports = !!document.querySelector && !!root.addEventListener; // Feature test
-
-    var el;
-    var wrapper;
-    var shadow;
+    var pluginName = 'SmartEmailField';
 
     var EMAIL_DOMAINS = [
       /* Default domains included */
@@ -77,8 +63,6 @@
     // Default settings
     var defaults = {
         emailDomains: EMAIL_DOMAINS,
-        callbackBefore: function () {},
-        callbackAfter: function () {}
     };
 
 
@@ -155,12 +139,12 @@
      * @param {String} wrapperClass
      * @returns {DOMNode}
      */
-    function wrap(el, wrapperClass) {
-      var oldHtml = el.outerHTML;
-      var newHtml = '<div class="' + wrapperClass + '">' + oldHtml + '</div>';
-      el.outerHTML = newHtml;
-      return el;
-    }
+    // function wrap(el, wrapperClass) {
+    //   var oldHtml = el.outerHTML;
+    //   var newHtml = '<div class="' + wrapperClass + '">' + oldHtml + '</div>';
+    //   el.outerHTML = newHtml;
+    //   return el;
+    // }
 
     /**
      * Throttles a function
@@ -239,6 +223,26 @@
       head.appendChild(style);
     }
 
+    function wrap(wrapper, elms) {
+      if (!elms.length) elms = [elms];
+
+      for (var i = elms.length - 1; i >= 0; i--) {
+        var child = (i > 0) ? wrapper.cloneNode(true) : wrapper;
+        var el = elms[i];
+
+        var parent  = el.parentNode;
+        var sibling = el.nextSibling;
+
+        child.appendChild(el);
+
+        if (sibling) {
+          parent.insertBefore(child, sibling);
+        } else {
+          parent.appendChild(child);
+        }
+      }
+    }
+
     /**
      * Get css of an element as a string
      * @private
@@ -255,8 +259,14 @@
       el.style.background = 'transparent';
       
       var shadow = document.createElement('div');
-      shadow.className = 'sef-shadow';
+      shadow.classList.add('sef-shadow');
       return shadow;
+    }
+
+    function getWrapperElement() {
+      var wrapperEl = document.createElement('div');
+      wrapperEl.classList.add('sef-wrapper');
+      return wrapperEl;
     }
 
     /**
@@ -265,7 +275,8 @@
      * @param {DomEvent} ev
      * @returns {undefined}
      */
-    function updateShadowText(ev) {
+    SmartEmailField.prototype._updateShadowText = function(ev) {
+      var that = this;
 
       if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev) && !isArrowRight(ev)) {
         return;
@@ -277,12 +288,17 @@
       setTimeout(function() {
         var text = ev.target.value;
 
+        if(that.el.scrollWidth > that.el.clientWidth) {
+          that.shadow.innerText = that.shadow.textContent = '';
+          return;
+        }
+
         if(isSpace(ev)) {
           text += ' ';
         }
 
         if(isArrowRight(ev)) {
-          el.value = shadow.innerText || shadow.textContent;
+          that.el.value = that.shadow.innerText || that.shadow.textContent;
           return;
         }
 
@@ -302,17 +318,31 @@
             textToAdd = foundDomain.substring(afterAt.length);
           }
 
-          shadow.innerText = shadow.textContent = text + textToAdd;
+          that.shadow.innerText = that.shadow.textContent = text + textToAdd;
         } else {
-          shadow.innerText = shadow.textContent = '';
+          that.shadow.innerText = that.shadow.textContent = '';
         }
 
       }, 0)
 
     }
 
-    function setEmailDomains(newEmailDomains) {
-      options.emailDomains = newEmailDomains;
+    function SmartEmailField(selector, options) {
+      this.el = selector instanceof Element ? selector : document.querySelector(selector);
+
+      if(!this.el) throw Error('No elements match the selector');
+
+      this._defaults = defaults;
+      this._name = pluginName;
+      this._selector = selector;
+
+      extend(defaults, options);
+
+      this.init();
+      
+      this.el.SmartEmailField = this;
+
+      return this;
     }
 
     /**
@@ -322,36 +352,24 @@
      * @param {Object} options User settings
      *                         options.emailDomains - email domains to use. Array of strings
      */
-    exports.init = function ( selector, options ) {
+    SmartEmailField.prototype.init = function () {
+      this.wrapper = getWrapperElement();
+      wrap(this.wrapper, this.el);
 
-        // feature test
-        if ( !supports ) return;
+      this.shadow = getShadowField(this.el);
+      prepend(this.wrapper, this.shadow);
 
-        extend(defaults, options);
-
-        el = document.querySelector(selector);
-        if(!el) throw Error('No elements match the selector');
-
-        wrap(el, 'sef-wrapper');
-        el = document.querySelector(selector);
-        
-        shadow = getShadowField(el);
-        wrapper = document.querySelector('.sef-wrapper');
-        prepend(wrapper, shadow);
-
-        shadow = document.querySelector('.sef-shadow');
-
-        addEvent(el, 'keydown', throttle(updateShadowText, 100));
-
+      addEvent(this.el, 'keydown', this._updateShadowText.bind(this));
     };
-
 
     //
     // Public APIs
     //
     
-    exports.setEmailDomains = setEmailDomains;
+    SmartEmailField.prototype.setEmailDomains = function (newEmailDomains) {
+      options.emailDomains = newEmailDomains;
+    }
 
-    return exports;
+    window.SmartEmailField = SmartEmailField;
 
-});
+})(window, document);

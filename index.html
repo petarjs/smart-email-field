@@ -29,11 +29,12 @@
     
     <form action="#">
       <input type="email" class="smart-email" name="email">
-      <button>Yep</button>
+      <input type="email" class="smart-email" name="email2">
     </form>
 
     <script>
-      window.SmartEmailField.init('.smart-email');
+      [].slice.call(document.querySelectorAll('.smart-email'))
+        .map(el => new SmartEmailField(el));
     </script>
   </body>
 </html>
