@@ -250,22 +250,44 @@
      * @returns {String}
      */
     function getElementCss(el) {
-      return window.getComputedStyle(el, '').cssText;
+      var css = window.getComputedStyle(el, '');
+      if(!css.cssText) {
+        var cssText = '';
+        for (var i=0; i<css.length; i++) {
+          cssText += css[i] + ':' + css.getPropertyValue(css[i]) + ';';
+        }
+        return cssText;
+      }
+      return css.cssText;
     }
 
     function getShadowField(el) {
       var elCss = getElementCss(el);
-      addStyle('.sef-shadow {' + elCss + '}');
+      addStyle('.sef-wrapper--' + el.getAttribute('id') + ' .sef-shadow {' + elCss + '}');
       el.style.background = 'transparent';
       
       var shadow = document.createElement('div');
       shadow.classList.add('sef-shadow');
+      Object.assign(shadow.style, {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        opacity: 0.3
+      });
       return shadow;
     }
 
-    function getWrapperElement() {
+    function getWrapperElement(el) {
       var wrapperEl = document.createElement('div');
       wrapperEl.classList.add('sef-wrapper');
+      wrapperEl.classList.add('sef-wrapper--' + el.getAttribute('id'));
+      Object.assign(wrapperEl.style, {
+        display: 'inline-block',
+        position: 'relative',
+        overflow: 'hidden'
+      });
       return wrapperEl;
     }
 
@@ -283,7 +305,6 @@
       }
 
       // handle firefox bugs
-      // handle multiple fields
 
       setTimeout(function() {
         var text = ev.target.value;
@@ -353,7 +374,12 @@
      *                         options.emailDomains - email domains to use. Array of strings
      */
     SmartEmailField.prototype.init = function () {
-      this.wrapper = getWrapperElement();
+      Object.assign(this.el.style, {
+        zIndex: 1,
+        position: 'relative'
+      });
+
+      this.wrapper = getWrapperElement(this.el);
       wrap(this.wrapper, this.el);
 
       this.shadow = getShadowField(this.el);
