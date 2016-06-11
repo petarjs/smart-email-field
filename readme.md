@@ -6,3 +6,6 @@
 ## Todo
 
 - Add tests
+- Add opts for shadow div text color, so we don't have to use opacity always
+- Provide examples
+- Write a guide

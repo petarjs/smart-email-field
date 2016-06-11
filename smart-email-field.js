@@ -133,20 +133,6 @@
     }
 
     /**
-     * Wrap element with a div that has a specified class
-     * @private
-     * @param {DOMNode} el
-     * @param {String} wrapperClass
-     * @returns {DOMNode}
-     */
-    // function wrap(el, wrapperClass) {
-    //   var oldHtml = el.outerHTML;
-    //   var newHtml = '<div class="' + wrapperClass + '">' + oldHtml + '</div>';
-    //   el.outerHTML = newHtml;
-    //   return el;
-    // }
-
-    /**
      * Throttles a function
      * @private
      * @param {Function} callback - function to throttle
@@ -223,6 +209,13 @@
       head.appendChild(style);
     }
 
+    /**
+     * Wrap an element with a wrapper element
+     * @private
+     * @param {DOMNode} wrapper
+     * @param {[DOMNode]} elms
+     * @returns {undefined}
+     */
     function wrap(wrapper, elms) {
       if (!elms.length) elms = [elms];
 
@@ -252,6 +245,7 @@
     function getElementCss(el) {
       var css = window.getComputedStyle(el, '');
       if(!css.cssText) {
+        // Firefox doesn't give us a nice cssText property, so we generate it ourselves
         var cssText = '';
         for (var i=0; i<css.length; i++) {
           cssText += css[i] + ':' + css.getPropertyValue(css[i]) + ';';
@@ -303,8 +297,6 @@
       if(isSpecialKey(ev) && !isDelete(ev) && !isBackspace(ev) && !isSpace(ev) && !isArrowRight(ev)) {
         return;
       }
-
-      // handle firefox bugs
 
       setTimeout(function() {
         var text = ev.target.value;
