@@ -40,7 +40,13 @@
 
     <script>
       [].slice.call(document.querySelectorAll('.my-email'))
-        .map(el => new SmartEmailField(el));
+        .map(el => new SmartEmailField(el, {
+          shadowStyle: {
+            background: 'rgba(100, 200, 250, 0.3)',
+            color: 'white',
+            opacity: 0.75
+          }
+        }));
     </script>
   </body>
 </html>

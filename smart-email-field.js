@@ -140,7 +140,7 @@
      * @param {Object} ctx - optional context for callback to be called in
      * @returns {Function}
      */
-    function throttle (callback, limit, ctx) {
+    function throttle(callback, limit, ctx) {
       var wait = false;
       return function () {
         if (!wait) {
@@ -194,7 +194,7 @@
      * @param {String} css
      * @returns {undefined}
      */
-    function addStyle(css) {
+    SmartEmailField.prototype.addStyle = function(css) {
       var head = document.head || document.getElementsByTagName('head')[0];
       var style = document.createElement('style');
 
@@ -216,7 +216,7 @@
      * @param {[DOMNode]} elms
      * @returns {undefined}
      */
-    function wrap(wrapper, elms) {
+    SmartEmailField.prototype.wrap = function(wrapper, elms) {
       if (!elms.length) elms = [elms];
 
       for (var i = elms.length - 1; i >= 0; i--) {
@@ -242,7 +242,7 @@
      * @param {DOMNode} el
      * @returns {String}
      */
-    function getElementCss(el) {
+    SmartEmailField.prototype.getElementCss = function(el) {
       var css = window.getComputedStyle(el, '');
       if(!css.cssText) {
         // Firefox doesn't give us a nice cssText property, so we generate it ourselves
@@ -255,25 +255,34 @@
       return css.cssText;
     }
 
-    function getShadowField(el) {
-      var elCss = getElementCss(el);
-      addStyle('.sef-wrapper--' + el.getAttribute('id') + ' .sef-shadow {' + elCss + '}');
+    SmartEmailField.prototype.getShadowField = function(el) {
+      var elCss = this.getElementCss(el);
+      this.addStyle('.sef-wrapper--' + el.getAttribute('id') + ' .sef-shadow {' + elCss + '}');
       el.style.background = 'transparent';
       
       var shadow = document.createElement('div');
       shadow.classList.add('sef-shadow');
-      Object.assign(shadow.style, {
+
+      var shadowStyle = {
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
         bottom: 0,
+        '-webkit-text-fill-color': 'unset' // allow changing of text color
+      };
+
+      var additionalShadowStyle = this._defaults.shadowStyle || {
         opacity: 0.3
-      });
+      };
+
+      shadowStyle = extend(shadowStyle, additionalShadowStyle);
+
+      Object.assign(shadow.style, shadowStyle);
       return shadow;
     }
 
-    function getWrapperElement(el) {
+    SmartEmailField.prototype.getWrapperElement = function(el) {
       var wrapperEl = document.createElement('div');
       wrapperEl.classList.add('sef-wrapper');
       wrapperEl.classList.add('sef-wrapper--' + el.getAttribute('id'));
@@ -339,7 +348,11 @@
       }, 0)
 
     }
-
+    /**
+     * Constructor
+     * @param {String|DOMElement} selector Selector of an element to initialize on, or DOM Element
+     * @param {Object} options User settings
+     */
     function SmartEmailField(selector, options) {
       this.el = selector instanceof Element ? selector : document.querySelector(selector);
 
@@ -349,7 +362,7 @@
       this._name = pluginName;
       this._selector = selector;
 
-      extend(defaults, options);
+      extend(this._defaults, options);
 
       this.init();
       
@@ -361,9 +374,6 @@
     /**
      * Initialize Plugin
      * @public
-     * @param {String} selector Selector of an element to initialize on
-     * @param {Object} options User settings
-     *                         options.emailDomains - email domains to use. Array of strings
      */
     SmartEmailField.prototype.init = function () {
       Object.assign(this.el.style, {
@@ -371,10 +381,10 @@
         position: 'relative'
       });
 
-      this.wrapper = getWrapperElement(this.el);
-      wrap(this.wrapper, this.el);
+      this.wrapper = this.getWrapperElement(this.el);
+      this.wrap(this.wrapper, this.el);
 
-      this.shadow = getShadowField(this.el);
+      this.shadow = this.getShadowField(this.el);
       prepend(this.wrapper, this.shadow);
 
       addEvent(this.el, 'keydown', this._updateShadowText.bind(this));
