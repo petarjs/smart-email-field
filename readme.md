@@ -7,7 +7,6 @@
 - Add tests
 - Add minified version
 - Add bower and npm, publish
-- Add opts for shadow div text color, so we don't have to use opacity always
 - Provide examples
 - Write a guide
   - can have multiple elements
