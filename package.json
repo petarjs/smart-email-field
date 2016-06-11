@@ -1,0 +1,26 @@
+{
+  "name": "smart-email-field",
+  "version": "1.0.0",
+  "description": "Gives your email fields nice autocomplete of common email domains",
+  "main": "smart-email-field.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/petarslovic/smart-email-field.git"
+  },
+  "author": {
+    "name": "Petar Slovic",
+    "email": "petar@petarslovic.com"
+  },
+  "contributors": [{
+    "name": "Petar Slovic",
+    "email": "petar@petarslovic.com"
+  }],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/petarslovic/smart-email-field/issues"
+  },
+  "homepage": "https://github.com/petarslovic/smart-email-field#readme"
+}
