@@ -114,3 +114,9 @@ It's pretty simple:
 - copy the styles of email field to shadow div
 - make email field's background transparent, so we can see the shadow field
 - fill shadow field with suggestion text
+
+
+## Drawbacks
+
+- If you want to style pseudo classes of the email field, you'll need to target the shadow element.
+- Missing mobile support. Maybe autocomplete on tap?
