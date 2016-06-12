@@ -1,19 +1,3 @@
-# Readme
-
-- Test in browsers you care about
-
-## Todo
-
-- Add tests
-- Add minified version
-- Provide examples/
-- Add a gh-pages page with an example
-- Write a guide
-  - can have multiple elements
-  - elements can have whatever styles
-  - email fields must have IDs
-  - fields on which the plugin is initialized are wrapped in .sef-wrapper class
-
 # Smart Email Field
 
 Smart Email Field adds autocompletion of popular email domains to your inputs.  
