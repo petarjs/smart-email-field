@@ -1,48 +1,185 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.0.28/css/bulma.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <script src="smart-email-field.js"></script>
 
     <style>
+      .p-lg {
+        padding: 30px;
+      }
+
+      .mt-lg {
+        margin-top: 20px !important;
+      }
+
+      .container {
+        max-width: 900px;
+      }
+
+      .hero.is-medium .hero-body {
+        padding-bottom: 80px;
+        padding-top: 80px;
+      }
+
+      .icon.is-huge {
+        display: inline-block;
+        font-size: 140px;
+        height: 140px;
+        line-height: 140px;
+        text-align: center;
+        vertical-align: top;
+        width: 140px;
+      }
+
+      .logo-container {
+        display: inline-block;
+        font-size: 240px;
+        height: 280px;
+        line-height: 280px;
+        text-align: center;
+        vertical-align: top;
+        width: 280px;
+      }
+
+      .is-color-black {
+        color: black;
+      }
+
+      .cta-github .heading,
+      .cta-github .title {
+        color: black;
+        text-transform: none;
+        font-weight: 200;
+      }
+
+      .is-huge-text {
+        font-size: 48px;
+      }
+
+      .is-big-text {
+        font-size: 32px;
+      }
+
       .my-email {
         font-size: 22px;
         background: beige;
         box-shadow: none;
-        border: 2px solid #eee;
+        border: 0;
         border-radius: 4px;
         padding: 10px;
-        font-family: Helvetica;
         outline: none;
         font-weight: 300;
-        background-color: azure;
+        background-color: #FFFFFF;
       }
 
       .my-email.my-email--big {
         font-size: 34px;
         background: black;
         color: darkgreen;
-        border-color: darkgreen;
-      }
-
-      .my-email:active,
-      .my-email:focus {
-        border: 2px solid #3abca4;
       }
     </style>
   </head>
   <body>
+
+    <div class="is-fullwidth">
+      <div class="container">
+        <div class="columns">
+          <div class="column has-text-centered p-lg">
+            <a href="http://petarslovic.com" title="Petar Slovic's Blog">
+              <img src="images/petar.png" width="75px" height="74px">
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="hero">
+      <div class="hero-body">
+        <div class="container p-lg">
+          <div class="columns">
+            <div class="column is-4">
+              <div class="logo-container">
+                <a href="https://github.com/petarslovic/smart-email-field" title="Smart Email Field">
+                  <img src="images/logo.png" width="240px" height="240px">
+                </a>
+              </div>
+            </div>
+            <div class="column">
+              <h1 class="title is-huge-text">
+                Smart Email Field
+              </h1>
+              <h2 class="subtitle is-big-text mt-lg">
+                Smart Email Field adds autocompletion of popular email domains to your inputs.
+              </h2>
+
+              <a href="https://github.com/petarslovic/smart-email-field" class="button is-primary is-outlined is-large">
+                <span class="icon">
+                  <i class="fa fa-github"></i>
+                </span>
+                <span>See Documentation</span>
+              </a>
+
+              <span class="button is-link is-large is-disabled">Or play with the example</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="hero is-medium is-primary is-bold">
+      <div class="hero-body">
+        <div class="container has-text-centered">
+          <h1 class="title is-big-text">
+            Try it out!
+          </h1>
+
+          <input tabindex="1" type="text" class="my-email my-email--big" name="email-field" id="my-email-1" placeholder="you@domain.com">
+        </div>
+      </div>
+    </section>
     
-    <form action="#">
-      <input type="email" class="my-email" name="email" id="em">
-      <br>
-      <input type="text" class="my-email my-email--big" name="email2" id="ail">
-    </form>
+    <section class="container">
+      <div class="level p-lg cta-github">
+        <div class="level-item">
+          <div class="columns p-lg">
+            <span class="icon is-huge is-color-black">
+              <i class="fa fa-github"></i>
+            </span>
+            <div class="column">
+              <p class="heading is-big-text">Check it out on GitHub!</p>
+              <p class="title is-big-text">
+                <a href="https://github.com/petarslovic/smart-email-field">petarslovic/smart-email-field</a>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="content has-text-centered">
+          <p>
+            <strong>Smart Email Field</strong> by <a href="http://petarslovic.com">Petar Slovic</a>. The source code is licensed
+            <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+            is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC ANS 4.0</a>.
+          </p>
+          <p>
+            <a class="icon" href="https://github.com/petarslovic/smart-email-field">
+              <i class="fa fa-github"></i>
+            </a>
+          </p>
+        </div>
+      </div>
+    </footer>
 
     <script>
       [].slice.call(document.querySelectorAll('.my-email'))
         .map(el => new SmartEmailField(el, {
           shadowStyle: {
-            background: 'rgba(250, 250, 250, 0.3)',
+            background: '#FFFFFF',
             color: 'rgba(0,0,0,0.3)'
           }
         }));
