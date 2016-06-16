@@ -9,7 +9,7 @@
  *
  */
 
-;(function (window, document, undefined) {
+(function (window, document) {
     'use strict';
 
     //
@@ -84,38 +84,7 @@
             }
         }
         return defaults;
-    };
-
-    /**
-     * A simple forEach() implementation for Arrays, Objects and NodeLists
-     * @private
-     * @param {Array|Object|NodeList} collection Collection of items to iterate
-     * @param {Function} callback Callback function for each iteration
-     * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
-     */
-    function forEach(collection, callback, scope) {
-        if (Object.prototype.toString.call(collection) === '[object Object]') {
-            for (var prop in collection) {
-                if (Object.prototype.hasOwnProperty.call(collection, prop)) {
-                    callback.call(scope, collection[prop], prop, collection);
-                }
-            }
-        } else {
-            for (var i = 0, len = collection.length; i < len; i++) {
-                callback.call(scope, collection[i], i, collection);
-            }
-        }
-    };
-
-    /**
-     * Remove whitespace from a string
-     * @private
-     * @param {String} string
-     * @returns {String}
-     */
-    function trim( string ) {
-        return string.replace(/^\s+|\s+$/g, '');
-    };
+    }
 
     /**
      * Cross Browser add event to DOM Node
@@ -133,27 +102,6 @@
     }
 
     /**
-     * Throttles a function
-     * @private
-     * @param {Function} callback - function to throttle
-     * @param {Number} limit - miliseconds to throttle
-     * @param {Object} ctx - optional context for callback to be called in
-     * @returns {Function}
-     */
-    function throttle(callback, limit, ctx) {
-      var wait = false;
-      return function () {
-        if (!wait) {
-          callback.apply(ctx || null, arguments);
-          wait = true;
-          setTimeout(function () {
-            wait = false;
-          }, limit);
-        }
-      }
-    }
-
-    /**
      * Add an element before another
      * @private
      * @param {DOMNode} parent
@@ -162,10 +110,6 @@
      */
     function prepend(parent, el) {
       parent.insertBefore(el, parent.firstChild);
-    }
-
-    function isAlphanumeric(e) {
-      return e.which <= 90 && e.which >= 48;
     }
 
     function isSpecialKey(e) {
@@ -395,7 +339,7 @@
     //
     
     SmartEmailField.prototype.setEmailDomains = function (newEmailDomains) {
-      options.emailDomains = newEmailDomains;
+      this._defaults.emailDomains = newEmailDomains;
     }
 
     window.SmartEmailField = SmartEmailField;
