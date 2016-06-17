@@ -1,7 +1,7 @@
 {
   "name": "smart-email-field",
   "description": "Gives your email fields nice autocomplete of common email domains",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "smart-email-field.js",
   "authors": [
     "Petar Slovic"

@@ -1,11 +1,11 @@
 /**
  *
- * Smart Email Field v0.0.1
- * Description, by Petar Slovic.
- * http://gomakethings.com
+ * Smart Email Field v1.0.3
+ * Smart Email Field is a plugin that adds autocompletion of popular email domains to your inputs.
+ * by Petar Slovic
+ * http://petarslovic.github.io/smart-email-field
  *
  * Free to use under the MIT License.
- * http://gomakethings.com/mit/
  *
  */
 
